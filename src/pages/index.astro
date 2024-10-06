@@ -9,9 +9,6 @@ import { PUBLIC_API_URL } from 'astro:env/client';
 
 // Define the API URL for use in the script
 const apiUrl = PUBLIC_API_URL;
-
-// Log the API URL to check if it's defined
-console.log('PUBLIC_API_URL in index.astro:', apiUrl);
 ---
 
 <Layout metadata={metadata}>
@@ -41,12 +38,9 @@ console.log('PUBLIC_API_URL in index.astro:', apiUrl);
           })
             .then((response) => {
               if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
               }
               return response.json();
-            })
-            .then((data) => {
-              console.log('Visit count incremented successfully:', data);
             })
             .catch((error) => {
               console.error('Error incrementing visit count:', error);

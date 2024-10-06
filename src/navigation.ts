@@ -1,32 +1,22 @@
-import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
-
 export const headerData = {
   links: [
     {
-      text: 'GitHub Repos',
+      text: 'Project GitHub Repos',
       links: [
+        {
+          text: 'Frontend',
+          href: 'https://github.com/Romero-jace/resume-infrastructure',
+        },
         {
           text: 'Frontend',
           href: 'https://github.com/Romero-jace/resume-frontend',
         },
-        // {
-        //   text: 'Startup',
-        //   href: getPermalink('/homes/startup'),
-        // },
-        // {
-        //   text: 'Mobile App',
-        //   href: getPermalink('/homes/mobile-app'),
-        // },
-        // {
-        //   text: 'Personal',
-        //   href: getPermalink('/homes/personal'),
-        // },
+        {
+          text: 'Frontend',
+          href: 'https://github.com/Romero-jace/resume-backend',
+        },
       ],
     },
-    // {
-    //   text: 'Widgets',
-    //   href: '#',
-    // },
   ],
 };
 
