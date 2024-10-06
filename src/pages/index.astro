@@ -1,0 +1,179 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+const metadata = {
+  title: 'Jace Romero - DevOps Engineer | QA Automation',
+  ignoreTitleTemplate: true,
+};
+import { PUBLIC_API_URL } from 'astro:env/client';
+
+// Define the API URL for use in the script
+const apiUrl = PUBLIC_API_URL;
+
+// Log the API URL to check if it's defined
+console.log('PUBLIC_API_URL in index.astro:', apiUrl);
+---
+
+<Layout metadata={metadata}>
+  <div class="bg-gray-100 min-h-screen dark:bg-gray-900">
+    <div class="container mx-auto p-12">
+      <div class="bg-white rounded-lg shadow-md p-8 dark:bg-gray-800">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">Jace Romero</h1>
+
+        <div class="mb-6 text-gray-700 dark:text-gray-300">
+          <p>Cedar Creek, TX 78612</p>
+          <p>
+            <a href="mailto:romero.jace@gmail.com" class="text-blue-500 hover:underline dark:text-blue-400"
+              >romero.jace@gmail.com</a
+            >
+          </p>
+          <p>+1 956 346 4849</p>
+        </div>
+
+        <script is:inline define:vars={{ apiUrl }}>
+          // Send a visit increment request to the backend API
+          fetch(`${apiUrl}/api/count`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ timestamp: new Date() }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log('Visit count incremented successfully:', data);
+            })
+            .catch((error) => {
+              console.error('Error incrementing visit count:', error);
+            });
+        </script>
+
+        <p class="mb-6 text-lg text-gray-700 dark:text-gray-300">
+          Experienced QA Automation Engineer transitioning into DevOps, bringing a wealth of automation expertise that
+          enhances CI/CD pipeline efficiency and infrastructure management. Proficient in building scalable automation
+          frameworks and integrating with diverse CI/CD tools. Adept at containerization, orchestration, and
+          infrastructure as code, with a strong foundation in test automation that ensures quality and reliability
+          throughout the development lifecycle. Ready to leverage QA insights to help organizations streamline their
+          DevOps processes and drive operational success.
+        </p>
+
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Work Experience</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Sr. QA Automation Engineer</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">Bold Penguin, Inc</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">October 2023 – July 2024</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Introduced scalable automation test practices.</li>
+                <li>Enhanced CI workflows for future QA success.</li>
+                <li>Mentored Jr. QA Engineers.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">QA Engineer</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">WorkStep</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">February 2022 – September 2022</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Established Cypress.io automation framework.</li>
+                <li>Developed QA framework independently.</li>
+                <li>Integrated Cypress.io with CircleCI.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Software QA Engineer</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">CenterEdge</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">May 2021 – February 2022</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Mentored QA Engineers in automation.</li>
+                <li>Expanded UI/API Cypress automation.</li>
+                <li>Managed test environment and production deployments.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">QA Automation Engineer</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">Edquity</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">June 2020 – February 2021</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Integrated Cypress.io with GitLab pipelines.</li>
+                <li>Created Scrum process for engineering.</li>
+                <li>Performed Scrum Master duties.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">QA Automation Engineer</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">EverlyWell</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">June 2018 – September 2019</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Reviewed and fixed automation test failures.</li>
+                <li>Built and integrated automation test pipelines.</li>
+                <li>Utilized CI tools: Jenkins, TravisCI, AWS CodeBuild.</li>
+                <li>Wrote tests using Cypress.io and WATIR.</li>
+                <li>Conducted visual regression tests with Applitools.</li>
+                <li>Mentored team members on automation best practices.</li>
+                <li>Used Postman for API testing.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">QA Engineer</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">SpeakWrite</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">October 2016 – February 2018</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Led automation efforts to reduce testing time.</li>
+                <li>Wrote and reviewed Selenium scripts using Python.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Associate Automation Engineer</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">Trion Worlds</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">August 2014 – October 2016</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Developed and updated automation scripts using Selenium IDE and PyTest.</li>
+                <li>Created foundation for the QA Engineering department.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Customer Service Representative</h3>
+              <p class="mb-1 text-gray-700 dark:text-gray-300">Trion Worlds</p>
+              <p class="mb-1 text-gray-600 dark:text-gray-400">February 2013 – August 2014</p>
+              <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+                <li>Provided customer support via chat, email, and in-game.</li>
+                <li>Addressed higher-tier technical support issues.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Skills</h2>
+          <ul class="list-disc list-inside text-gray-700 dark:text-gray-300">
+            <li>
+              <b class="text-gray-800 dark:text-white">DevOps & Infrastructure:</b> Kubernetes, Minikube, Docker, Terraform
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">CI/CD Tools:</b> Jenkins, TravisCI, CircleCI, GitLab, AWS CodeBuild,
+              ArgoCD, GitHub Actions
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">Automation Tools:</b> Cypress.io, Selenium, WATIR
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">API Testing Tools:</b> Postman, REST Assured
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">Monitoring & Observability:</b> Prometheus, Datadog
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">Other Tools:</b> Git, JIRA
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
