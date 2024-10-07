@@ -3,57 +3,66 @@ name: Docker Container Push and Update
 on:
   push:
     branches:
-      - main # Trigger on pushes to the main branch
+      - main
 
 jobs:
-  build-test-scan-push:
+  build-scan-push:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Run Randomize Names Script
+        id: randomize_names
+        run: |
+          RANDOMIZED_NAMES=$(./randomize_names.sh)
+          echo "DOCKER_TAG=$RANDOMIZED_NAMES-${{ github.sha }}" >> $GITHUB_ENV
 
-      - name: Login to Artifact Registry
-        uses: google-github-actions/auth@v1
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      - name: Configure Docker for Artifact Registry
+      - name: Set up Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build the Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false
-          tags: resume-frontend:latest
+          tags: resume-frontend:${{ github.env.DOCKER_TAG }}
 
       - name: Scan image for vulnerabilities
         uses: anchore/scan-action@v2
         with:
-          image: resume-frontend:latest
-          severity-cutoff: medium # Adjust severity as needed
+          image: resume-frontend:${{ github.env.DOCKER_TAG }}
+          severity-cutoff: medium
 
       - name: Push the Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/resume-frontend:${{ github.sha }}
+          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.env.DOCKER_TAG }}
 
-      - name: Update IaC repo manifest
+      - name: Checkout Infrastructure repo to update image tag
         uses: actions/checkout@v4
         with:
-          repository: your-org/your-iac-repo
-          path: iac-repo
-          token: ${{ secrets.IAC_REPO_TOKEN }}
-        working-directory: iac-repo
-      - name: Update image name in manifest
+          repository: Black-And-White-Club/resume-infrastructure
+          token: ${{ secrets.INFRASTRUCTURE_REPO_TOKEN }}
+          path: resume-infrastructure
+
+      - name: Update image tag in deployment manifest
         run: |
-          sed -i 's/us-central1-docker.pkg.dev\/${{ secrets.GCP_PROJECT_ID }}\/resume-frontend\/resume-frontend:.*/us-central1-docker.pkg.dev\/${{ secrets.GCP_PROJECT_ID }}\/resume-frontend\/resume-frontend:${{ github.sha }}/g' deployment.yaml
+          cd resume-infrastructure
+          sed -i 's|image: us-central1-docker.pkg.dev/.*/resume-frontend:.*|image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.env.DOCKER_TAG }}|' kubernetes-manifests/resume-frontend-deployment.yaml || { echo "Error updating deployment manifest" ; exit 1; }
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Update resume-frontend image tag"
+          git add kubernetes-manifests/resume-frontend-deployment.yaml
+          git commit -m "Update resume-frontend image to ${{ github.env.DOCKER_TAG }}"
           git push origin main

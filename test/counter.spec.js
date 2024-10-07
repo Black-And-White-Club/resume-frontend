@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/preact';
-import Counter from 'src/components/common/Counter'; // Adjust the import path as necessary
+import Counter from 'src/components/common/Counter';
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
@@ -9,7 +9,7 @@ beforeEach(() => {
     if (url === `${import.meta.env.PUBLIC_API_URL}/api/count`) {
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ visits: 42 }), // Adjust according to the expected response
+        json: () => Promise.resolve({ visits: 42 }),
       });
     }
     return Promise.reject(new Error('Unknown endpoint'));

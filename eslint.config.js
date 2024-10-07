@@ -4,9 +4,9 @@ import globals from 'globals';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import typescriptParser from '@typescript-eslint/parser';
-import vitestPlugin from 'eslint-plugin-vitest'; // Import Vitest plugin
+import vitest from '@vitest/eslint-plugin'; // Import Vitest plugin
 
-/** @type {import('eslint').Linter.FlatConfig} */
+// /** @type {import('eslint').Linter.FlatConfig} */
 export default [
   js.configs.recommended,
   ...eslintPluginAstro.configs['flat/recommended'],
@@ -64,14 +64,23 @@ export default [
     ignores: ['dist', 'node_modules', '.github', 'types.generated.d.ts', '.astro'],
   },
   {
-    files: ['**/*.{js,ts,jsx,tsx,astro}'], // Include relevant files
-    languageOptions: {
-      plugins: {
-        vitest: vitestPlugin, // Add Vitest plugin
-      },
+    files: ['test/**'], // or any other pattern
+    plugins: {
+      vitest,
     },
     rules: {
-      'vitest/no-conditional-expect': 'warn', // Vitest specific rules can go here
+      ...vitest.configs.recommended.rules, // you can also use vitest.configs.all.rules to enable all rules
+      'vitest/max-nested-describe': ['error', { max: 3 }], // you can also modify rules' behavior using option like this
+    },
+    settings: {
+      vitest: {
+        typecheck: true,
+      },
+    },
+    languageOptions: {
+      globals: {
+        ...vitest.environments.env.globals,
+      },
     },
   },
 ];

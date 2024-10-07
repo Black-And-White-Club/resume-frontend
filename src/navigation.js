@@ -4,7 +4,7 @@ export const headerData = {
       text: 'Project GitHub Repos',
       links: [
         {
-          text: 'Frontend',
+          text: 'IaC',
           href: 'https://github.com/Romero-jace/resume-infrastructure',
         },
         {
@@ -12,7 +12,7 @@ export const headerData = {
           href: 'https://github.com/Romero-jace/resume-frontend',
         },
         {
-          text: 'Frontend',
+          text: 'Backend',
           href: 'https://github.com/Romero-jace/resume-backend',
         },
       ],
