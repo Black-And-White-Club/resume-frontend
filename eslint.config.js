@@ -4,7 +4,9 @@ import globals from 'globals';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import typescriptParser from '@typescript-eslint/parser';
+import vitestPlugin from 'eslint-plugin-vitest'; // Import Vitest plugin
 
+/** @type {import('eslint').Linter.FlatConfig} */
 export default [
   js.configs.recommended,
   ...eslintPluginAstro.configs['flat/recommended'],
@@ -14,6 +16,11 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
+        vitest: true, // Add Vitest globals
+        beforeEach: true, // Vitest specific globals
+        afterEach: true,
+        test: true,
+        describe: true,
       },
     },
   },
@@ -22,7 +29,7 @@ export default [
     languageOptions: {
       parser: astroEslintParser,
       parserOptions: {
-        parser: '@typescript-eslint/parser',
+        parser: typescriptParser,
         extraFileExtensions: ['.astro'],
       },
     },
@@ -55,5 +62,16 @@ export default [
   },
   {
     ignores: ['dist', 'node_modules', '.github', 'types.generated.d.ts', '.astro'],
+  },
+  {
+    files: ['**/*.{js,ts,jsx,tsx,astro}'], // Include relevant files
+    languageOptions: {
+      plugins: {
+        vitest: vitestPlugin, // Add Vitest plugin
+      },
+    },
+    rules: {
+      'vitest/no-conditional-expect': 'warn', // Vitest specific rules can go here
+    },
   },
 ];

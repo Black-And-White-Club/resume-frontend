@@ -1,0 +1,59 @@
+name: Docker Container Push and Update
+
+on:
+  push:
+    branches:
+      - main # Trigger on pushes to the main branch
+
+jobs:
+  build-test-scan-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Artifact Registry
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build the Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: false
+          tags: resume-frontend:latest
+
+      - name: Scan image for vulnerabilities
+        uses: anchore/scan-action@v2
+        with:
+          image: resume-frontend:latest
+          severity-cutoff: medium # Adjust severity as needed
+
+      - name: Push the Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/resume-frontend:${{ github.sha }}
+
+      - name: Update IaC repo manifest
+        uses: actions/checkout@v4
+        with:
+          repository: your-org/your-iac-repo
+          path: iac-repo
+          token: ${{ secrets.IAC_REPO_TOKEN }}
+        working-directory: iac-repo
+      - name: Update image name in manifest
+        run: |
+          sed -i 's/us-central1-docker.pkg.dev\/${{ secrets.GCP_PROJECT_ID }}\/resume-frontend\/resume-frontend:.*/us-central1-docker.pkg.dev\/${{ secrets.GCP_PROJECT_ID }}\/resume-frontend\/resume-frontend:${{ github.sha }}/g' deployment.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Update resume-frontend image tag"
+          git push origin main
