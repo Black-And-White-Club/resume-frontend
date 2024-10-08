@@ -56,10 +56,18 @@ jobs:
         
       - name: Update image tag in deployment manifest
         run: |
-          cd resume-infrastructure
-          sed -i 's|image: us-central1-docker.pkg.dev/.*/resume-frontend:.*|image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}|' kubernetes-manifests/resume-frontend-deployment.yaml || { echo "Error updating deployment manifest" ; exit 1; }
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add kubernetes-manifests/resume-frontend-deployment.yaml
-          git commit -m "Update resume-frontend image to ${{ github.sha }}"
-          git push origin main
+            cd resume-infrastructure
+            echo "Current file content before update:"
+            cat kubernetes-manifests/resume-frontend-deployment.yaml
+        
+            sed -i -E 's|image: us-central1-docker.pkg.dev/.*/resume-frontend:.*|image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}|' kubernetes-manifests/resume-frontend-deployment.yaml || { echo "Error updating deployment manifest" ; exit 1; }
+            
+            echo "Current file content after update:"
+            cat kubernetes-manifests/resume-frontend-deployment.yaml
+        
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add kubernetes-manifests/resume-frontend-deployment.yaml
+            git commit -m "Update resume-frontend image to ${{ github.sha }}"
+            git push origin main
+          
