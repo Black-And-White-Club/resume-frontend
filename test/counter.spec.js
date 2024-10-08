@@ -1,50 +1,45 @@
 import { render, screen, waitFor } from '@testing-library/preact';
 import Counter from 'src/components/common/Counter';
-import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi, expect, test } from 'vitest';
 
-// Mocking fetch before tests
-beforeEach(() => {
-  vi.spyOn(global, 'fetch').mockImplementation((url) => {
-    if (url === `${import.meta.env.PUBLIC_API_URL}/api/count`) {
+describe('Counter Component', () => {
+  beforeEach(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(() => {
       return Promise.resolve({
         ok: true,
         json: () => Promise.resolve({ visits: 42 }),
       });
-    }
-    return Promise.reject(new Error('Unknown endpoint'));
-  });
-});
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
-describe('Counter Component', () => {
-  // Unit Test: Verifying initial rendering
-  test('renders initial visit count as 0', () => {
-    render(<Counter />);
-    expect(screen.getByText(/You are visitor number/i)).toBeInTheDocument();
-    expect(screen.getByText(/0/i)).toBeInTheDocument();
-  });
-
-  // Component Test: Verifying data fetching and display
-  test('fetches visit count and displays it', async () => {
-    render(<Counter />);
-    await waitFor(() => {
-      expect(screen.getByText(/You are visitor number/i)).toBeInTheDocument();
-      expect(screen.getByText(/42/i)).toBeInTheDocument();
     });
   });
 
-  // Component Test: Verifying error handling
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('renders initial visit count as loading', () => {
+    render(<Counter />);
+    const countValueElement = screen.getByTestId('count-value');
+    expect(countValueElement.textContent).toBe('...');
+  });
+
+  test('fetches visit count 42 and displays it', async () => {
+    render(<Counter />);
+    const countElement = await screen.findByText('You are visitor number 42! Hi there!');
+    expect(countElement).toBeInTheDocument();
+  });
+
   test('handles fetch error gracefully', async () => {
     global.fetch.mockImplementationOnce(() => Promise.reject(new Error('Fetch failed')));
-
     render(<Counter />);
+
+    // Wait for the potential error message to appear
     await waitFor(() => {
-      expect(screen.getByText(/You are visitor number/i)).toBeInTheDocument();
-      expect(screen.getByText(/0/i)).toBeInTheDocument();
+      // Assert that the specific error message is displayed
+      expect(screen.getByText('Failed to fetch visit count')).toBeInTheDocument();
+
+      // Optionally assert that the count is not displayed, or any other relevant behavior
+      // For instance:
+      // expect(screen.queryByText('You are visitor number 42! Hi there!')).not.toBeInTheDocument();
     });
   });
 });

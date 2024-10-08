@@ -17,7 +17,8 @@ jobs:
         id: randomize_names
         run: |
           RANDOMIZED_NAMES=$(./randomize_names.sh)
-          echo "DOCKER_TAG=$RANDOMIZED_NAMES-${{ github.sha }}" >> $GITHUB_ENV
+          echo "$RANDOMIZED_NAMES"
+          echo "DOCKER_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2

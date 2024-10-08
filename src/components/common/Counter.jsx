@@ -2,34 +2,35 @@ import { useEffect, useState } from 'preact/hooks';
 import { PUBLIC_API_URL } from 'astro:env/client';
 
 const Counter = () => {
-  // Declare count using useState hook
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Function to fetch the visit count from the API
-  const fetchVisitCount = async () => {
-    try {
-      const response = await fetch(`${PUBLIC_API_URL}/api/count`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setCount(data.visits); // Update count with the fetched visit count
-    } catch (error) {
-      console.error('Error fetching visit count:', error);
-      setCount(0); // Reset count to 0 on error
-    }
-  };
-
-  // Fetch visit count on component mount
   useEffect(() => {
+    const fetchVisitCount = async () => {
+      const url = `${PUBLIC_API_URL}/api/count`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setCount(data.visits);
+      } catch (error) {
+        console.error('Error fetching visit count:', error);
+        setError('Failed to fetch visit count');
+      }
+    };
+
     fetchVisitCount();
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []);
 
   return (
     <div className="counter">
       <p id="visit-count">
-        You are visitor number <span className="font-bold">{count}</span>! Hi there!
+        You are visitor number <span data-testid="count-value">{count === null ? '...' : count}</span>! Hi there!
       </p>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };

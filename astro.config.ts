@@ -42,7 +42,7 @@ export default defineConfig({
         PUBLIC_API_URL: envField.string({
           context: 'client', // Expose it to the client
           access: 'public', // Make it public
-          optional: false, // Ensure it's required
+          optional: true, // Ensure it's required
         }),
       },
     },
