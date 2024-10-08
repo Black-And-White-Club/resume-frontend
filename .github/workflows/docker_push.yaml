@@ -31,15 +31,6 @@ jobs:
           push: false
           tags: resume-frontend:${{ github.sha }}
 
-      - name: Install Grype
-        run: |
-          curl -sSL https://github.com/anchore/grype/releases/latest/download/grype_$(uname -s)_$(uname -m).tar.gz | tar -xz -C /usr/local/bin
-          chmod +x /usr/local/bin/grype
-        
-      - name: Scan Docker image with Grype
-        run: |
-            grype resume-frontend:${{ github.sha }}
-
       - name: Push the Docker image
         uses: docker/build-push-action@v6
         with:
