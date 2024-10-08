@@ -13,11 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Randomize Names Script
-        id: randomize_names
-        run: |
-          echo "DOCKER_TAG=${{ github.sha }}" >> $GITHUB_ENV
-
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
@@ -34,12 +29,12 @@ jobs:
         with:
           context: .
           push: false
-          tags: resume-frontend:${{ github.env.DOCKER_TAG }}
+          tags: resume-frontend:${{ github.sha }}
 
       - name: Scan image for vulnerabilities
         uses: anchore/scan-action@v2
         with:
-          image: resume-frontend:${{ github.env.DOCKER_TAG }}
+          image: resume-frontend:${{ github.sha }}
           severity-cutoff: medium
 
       - name: Push the Docker image
@@ -47,7 +42,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.env.DOCKER_TAG }}
+          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}
 
       - name: Checkout Infrastructure repo to update image tag
         uses: actions/checkout@v4
@@ -59,9 +54,9 @@ jobs:
       - name: Update image tag in deployment manifest
         run: |
           cd resume-infrastructure
-          sed -i 's|image: us-central1-docker.pkg.dev/.*/resume-frontend:.*|image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.env.DOCKER_TAG }}|' kubernetes-manifests/resume-frontend-deployment.yaml || { echo "Error updating deployment manifest" ; exit 1; }
+          sed -i 's|image: us-central1-docker.pkg.dev/.*/resume-frontend:.*|image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}|' kubernetes-manifests/resume-frontend-deployment.yaml || { echo "Error updating deployment manifest" ; exit 1; }
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add kubernetes-manifests/resume-frontend-deployment.yaml
-          git commit -m "Update resume-frontend image to ${{ github.env.DOCKER_TAG }}"
+          git commit -m "Update resume-frontend image to ${{ github.sha }}"
           git push origin main
