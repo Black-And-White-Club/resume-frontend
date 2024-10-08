@@ -4,6 +4,7 @@
 # Random Mint Discs name to tag my containers...for fun
 
 set -e
+set -x  # Enable debugging
 
 # Make API Request with all the headers
 response=$(curl -s 'https://api.roguediscs.com/v1/category/?url=mint-discs' \
@@ -20,8 +21,20 @@ response=$(curl -s 'https://api.roguediscs.com/v1/category/?url=mint-discs' \
   -H 'sec-fetch-site: same-site' \
   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36')
 
+# Check if the response is valid JSON
+if ! echo "$response" | jq empty; then
+  echo "Invalid JSON response" >&2
+  exit 1
+fi
+
 # Extract names and randomize
 names=$(echo "$response" | jq -r '.Data.tabs.discs | .. | .name? // empty' | shuf)
+
+# Check if names are empty
+if [ -z "$names" ]; then
+  echo "No names found or invalid response" >&2
+  exit 1
+fi
 
 # Output the randomized names
 echo "$names"
