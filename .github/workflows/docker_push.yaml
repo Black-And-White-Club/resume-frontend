@@ -13,10 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Authenticate to Google Cloud
-      #   uses: google-github-actions/auth@v2
-      #   with:
-      #     credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Set short git commit SHA and Docker image tag
         id: vars
@@ -25,8 +25,8 @@ jobs:
           echo "COMMIT_SHORT_SHA=$shortSha" >> $GITHUB_ENV
           echo "DOCKER_IMAGE_TAG=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:$shortSha" >> $GITHUB_ENV
 
-      # - name: Set up Artifact Registry
-      #   run: gcloud auth configure-docker us-central1-docker.pkg.dev
+      - name: Set up Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -38,12 +38,12 @@ jobs:
           push: false
           tags: ${{ env.DOCKER_IMAGE_TAG }}
 
-      # - name: Push the Docker image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: .
-      #     push: true
-      #     tags: ${{ env.DOCKER_IMAGE_TAG }}
+      - name: Push the Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Checkout Infrastructure repo to update image tag
         uses: actions/checkout@v4
@@ -55,16 +55,7 @@ jobs:
       - name: Update image tag in deployment manifest
         run: |
           cd resume-infrastructure
-          
-          echo "File before update:"
-          cat kubernetes-manifests/resume-frontend-deployment.yaml
-
-          # Use sed to replace the SHA while retaining the GCP_PROJECT_ID placeholder
           sed -i -E 's|(image:\s*.*resume-frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' kubernetes-manifests/resume-frontend-deployment.yaml
-
-          echo "File after update:"
-          cat kubernetes-manifests/resume-frontend-deployment.yaml
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add kubernetes-manifests/resume-frontend-deployment.yaml
