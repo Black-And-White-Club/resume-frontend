@@ -44,7 +44,15 @@ jobs:
           repository: Black-And-White-Club/resume-infrastructure
           token: ${{ secrets.INFRASTRUCTURE_REPO_TOKEN }}
           path: resume-infrastructure
-
+      - name: Check if Deployment Manifest Exists
+        run: |
+            if [ -f kubernetes-manifests/resume-frontend-deployment.yaml ]; then
+              echo "File exists."
+            else
+              echo "File does not exist."
+              exit 1
+            fi
+        
       - name: Update image tag in deployment manifest
         run: |
           cd resume-infrastructure
