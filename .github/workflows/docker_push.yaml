@@ -13,13 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      # - name: Authenticate to Google Cloud
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      - name: Set up Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+      # - name: Set up Artifact Registry
+      #   run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -31,12 +31,12 @@ jobs:
           push: false
           tags: resume-frontend:${{ github.sha }}
 
-      - name: Push the Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}
+      # - name: Push the Docker image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}
 
       - name: Checkout Infrastructure repo to update image tag
         uses: actions/checkout@v4
@@ -56,13 +56,21 @@ jobs:
         
       - name: Update image tag in deployment manifest
         run: |
-          cd resume-infrastructure
-          sed -i -E 's|^(image:).*|\\1 us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}|' kubernetes-manifests/resume-frontend-deployment.yaml || { echo "Error updating deployment manifest" ; exit 1; }
-        
+            cd resume-infrastructure
+            
+            echo "File before update:"
+            cat kubernetes-manifests/resume-frontend-deployment.yaml
+            
+            sed -i -E '/containers:/,/image:/ s|(image:).*|\\1 us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}|' kubernetes-manifests/resume-frontend-deployment.yaml
+            
+            echo "File after update:"
+            cat kubernetes-manifests/resume-frontend-deployment.yaml
+            
             git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add kubernetes-manifests/resume-frontend-deployment.yaml
-          git commit -m "Update resume-frontend image to ${{ github.sha }}"
-          git push origin main
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add kubernetes-manifests/resume-frontend-deployment.yaml
+            git commit -m "Update resume-frontend image to ${{ github.sha }}"
+            git push origin main
+          
           
           
