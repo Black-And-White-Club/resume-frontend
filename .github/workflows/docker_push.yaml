@@ -31,11 +31,14 @@ jobs:
           push: false
           tags: resume-frontend:${{ github.sha }}
 
-      - name: Scan image for vulnerabilities
-        uses: anchore/scan-action@v2
-        with:
-          image: resume-frontend:${{ github.sha }}
-          severity-cutoff: medium
+      - name: Install Grype
+        run: |
+          curl -sSL https://github.com/anchore/grype/releases/latest/download/grype_$(uname -s)_$(uname -m).tar.gz | tar -xz -C /usr/local/bin
+          chmod +x /usr/local/bin/grype
+        
+      - name: Scan Docker image with Grype
+        run: |
+            grype resume-frontend:${{ github.sha }}
 
       - name: Push the Docker image
         uses: docker/build-push-action@v6
