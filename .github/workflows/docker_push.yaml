@@ -61,7 +61,7 @@ jobs:
             echo "File before update:"
             cat kubernetes-manifests/resume-frontend-deployment.yaml
             
-            sed -i -E '/containers:/,/image:/ s|(image:).*|\\1 us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}|' kubernetes-manifests/resume-frontend-deployment.yaml
+            sed -i -E '/containers:/,/image:/ s|image:.*|image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}|' kubernetes-manifests/resume-frontend-deployment.yaml
             
             echo "File after update:"
             cat kubernetes-manifests/resume-frontend-deployment.yaml
