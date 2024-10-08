@@ -46,6 +46,7 @@ jobs:
           path: resume-infrastructure
       - name: Check if Deployment Manifest Exists
         run: |
+            cd resume-infrastructure
             if [ -f kubernetes-manifests/resume-frontend-deployment.yaml ]; then
               echo "File exists."
             else
