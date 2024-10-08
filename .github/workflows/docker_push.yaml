@@ -16,8 +16,6 @@ jobs:
       - name: Run Randomize Names Script
         id: randomize_names
         run: |
-          RANDOMIZED_NAMES=$(./randomize_names.sh)
-          echo "$RANDOMIZED_NAMES"
           echo "DOCKER_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
