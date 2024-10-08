@@ -9,9 +9,6 @@ jobs:
   build-scan-push:
     runs-on: ubuntu-latest
 
-    env:
-      DOCKER_IMAGE_TAG: "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:${{ github.sha }}"
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,6 +17,13 @@ jobs:
       #   uses: google-github-actions/auth@v2
       #   with:
       #     credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set short git commit SHA and Docker image tag
+        id: vars
+        run: |
+          shortSha=$(git rev-parse --short ${{ github.sha }})
+          echo "COMMIT_SHORT_SHA=$shortSha" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_TAG=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:$shortSha" >> $GITHUB_ENV
 
       # - name: Set up Artifact Registry
       #   run: gcloud auth configure-docker us-central1-docker.pkg.dev
@@ -32,7 +36,7 @@ jobs:
         with:
           context: .
           push: false
-          tags: resume-frontend:${{ github.sha }}
+          tags: ${{ env.DOCKER_IMAGE_TAG }}
 
       # - name: Push the Docker image
       #   uses: docker/build-push-action@v6
@@ -48,16 +52,6 @@ jobs:
           token: ${{ secrets.INFRASTRUCTURE_REPO_TOKEN }}
           path: resume-infrastructure
 
-      - name: Check if Deployment Manifest Exists
-        run: |
-          cd resume-infrastructure
-          if [ -f kubernetes-manifests/resume-frontend-deployment.yaml ]; then
-            echo "File exists."
-          else
-            echo "File does not exist."
-            exit 1
-          fi
-        
       - name: Update image tag in deployment manifest
         run: |
           cd resume-infrastructure
@@ -65,8 +59,8 @@ jobs:
           echo "File before update:"
           cat kubernetes-manifests/resume-frontend-deployment.yaml
 
-          # Use sed to replace the image tag while retaining "image:"
-          sed -i -E 's|(image:\s*).*|\1${{ env.DOCKER_IMAGE_TAG }}|' kubernetes-manifests/resume-frontend-deployment.yaml
+          # Use sed to replace the SHA while retaining the GCP_PROJECT_ID placeholder
+          sed -i -E 's|(image:\s*.*resume-frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' kubernetes-manifests/resume-frontend-deployment.yaml
 
           echo "File after update:"
           cat kubernetes-manifests/resume-frontend-deployment.yaml
@@ -74,5 +68,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add kubernetes-manifests/resume-frontend-deployment.yaml
-          git commit -m "Update resume-frontend image to ${{ github.sha }}"
+          git commit -m "Update resume-frontend image to ${{ env.COMMIT_SHORT_SHA }}"
           git push origin main
