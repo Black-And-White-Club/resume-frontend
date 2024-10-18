@@ -33,6 +33,7 @@ const apiUrl = PUBLIC_API_URL;
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Host': 'resume-backend-svc',
             },
             body: JSON.stringify({ timestamp: new Date() }),
           })
