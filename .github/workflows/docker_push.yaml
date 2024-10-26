@@ -23,7 +23,7 @@ jobs:
         run: |
           shortSha=$(git rev-parse --short ${{ github.sha }})
           echo "COMMIT_SHORT_SHA=$shortSha" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_TAG=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images/resume-frontend:$shortSha" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_TAG=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images-charts/resume-frontend:$shortSha" >> $GITHUB_ENV
 
       - name: Set up Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
