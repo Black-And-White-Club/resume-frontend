@@ -55,6 +55,7 @@ jobs:
       - name: Update image tag in frontend manifest
         run: |
           cd resume-infrastructure
+          sed -i -E 's|(docker pull us-central1-docker.pkg.dev/portfolio-app-images-charts/resume-frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' kubernetes-manifests/resume-frontend.yaml
           sed -i -E 's|(image:\s*.*resume-frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' kubernetes-manifests/resume-frontend.yaml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

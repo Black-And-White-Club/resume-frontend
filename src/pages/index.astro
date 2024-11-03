@@ -5,10 +5,10 @@ const metadata = {
   title: 'Jace Romero - DevOps Engineer | QA Automation',
   ignoreTitleTemplate: true,
 };
-import { PUBLIC_API_URL } from 'astro:env/client';
+// import { PUBLIC_API_URL } from 'astro:env/client';
 
-// Define the API URL for use in the script
-const apiUrl = PUBLIC_API_URL;
+// // Define the API URL for use in the script
+// const apiUrl = PUBLIC_API_URL;
 ---
 
 <Layout metadata={metadata}>
@@ -27,13 +27,14 @@ const apiUrl = PUBLIC_API_URL;
           <p>+1 956 346 4849</p>
         </div>
 
-        <script is:inline define:vars={{ apiUrl }}>
+        <script is:inline>
           // Send a visit increment request to the backend API
-          fetch(`${apiUrl}/api/count`, {
+          // local add define:vars={{ apiUrl }} to script and fetch
+          fetch('/api/count', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Host': 'resume-backend-svc',
+              Host: 'resume-backend-svc',
             },
             body: JSON.stringify({ timestamp: new Date() }),
           })

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { PUBLIC_API_URL } from 'astro:env/client';
+// import { PUBLIC_API_URL } from 'astro:env/client';
 
 const Counter = () => {
   const [count, setCount] = useState(null);
@@ -7,7 +7,8 @@ const Counter = () => {
 
   useEffect(() => {
     const fetchVisitCount = async () => {
-      const url = `${PUBLIC_API_URL}/api/count`;
+      // local add ${PUBLIC_API_URL} in fron of /api/count
+      const url = '/api/count';
 
       try {
         const response = await fetch(url);
