@@ -5,15 +5,15 @@ export const headerData = {
       links: [
         {
           text: 'IaC',
-          href: 'https://github.com/Romero-jace/resume-infrastructure',
+          href: 'https://github.com/Black-And-White-Club/resume-infrastructure',
         },
         {
           text: 'Frontend',
-          href: 'https://github.com/Romero-jace/resume-frontend',
+          href: 'https://github.com/Black-And-White-Club/resume-frontend',
         },
         {
           text: 'Backend',
-          href: 'https://github.com/Romero-jace/resume-backend',
+          href: 'https://github.com/Black-And-White-Club/resume-backend',
         },
       ],
     },
