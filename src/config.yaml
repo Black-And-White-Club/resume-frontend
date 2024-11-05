@@ -4,14 +4,14 @@ site:
   base: '/'
   trailingSlash: false
 
-  googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
+  googleSiteVerificationId: gUGgsgYdpMX5DhqsOdMlum0G3Oe4HIi8nwJpwlwauCc
 
 # Default SEO metadata
 metadata:
   title:
     default: Jace Romero Resume Portfolio App
     template: '%s — Jace Romero Resume Portfolio App'
-  description: "\U0001F680 DevOps/QA Automation Engineer"
+  description: 'DevOps/QA Automation Engineer'
   robots:
     index: true
     follow: true
