@@ -55,10 +55,10 @@ jobs:
       - name: Update image tag in frontend manifest
         run: |
           cd resume-infrastructure
-          sed -i -E 's|docker pull (.*)/resume-frontend:(.*?)|docker pull \1:${{ env.COMMIT_SHORT_SHA }}|' kubernetes-manifests/resume-frontend.yaml
-          sed -i -E 's|(image:\s*.*resume-frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' kubernetes-manifests/resume-frontend.yaml
+          sed -i -E 's|docker pull (.*):(.*?)|docker pull \1:${{ env.COMMIT_SHORT_SHA }}|' resume-app-manifests/resume-frontend.yaml
+          sed -i -E 's|(image:\s*.*resume-frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' resume-app-manifests/resume-frontend.yaml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add kubernetes-manifests/resume-frontend.yaml
+          git add resume-app-manifests/resume-frontend.yaml
           git commit -m "Update resume-frontend image to ${{ env.COMMIT_SHORT_SHA }}"
           git push origin main
