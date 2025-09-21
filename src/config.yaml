@@ -1,6 +1,6 @@
 site:
   name: Jace Romero Resume Portfolio App
-  site: 'https://jaromero.cloud'
+  site: 'http://jaromero.cloud'
   base: '/'
   trailingSlash: false
 
