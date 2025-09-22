@@ -23,5 +23,8 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 # Copy the built app from the build stage to the nginx container
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# Change ownership to nginx user
+RUN chown -R nginx:nginx /usr/share/nginx/html
+
 # Expose port 8080
 EXPOSE 3000
