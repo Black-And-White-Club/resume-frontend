@@ -1,49 +1,41 @@
-name: Docker Container Push and Update
+name: Build and push to OCIR
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  build-scan-push:
+  build-and-push:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-
-      - name: Set short git commit SHA and Docker image tag
+      - name: Set short git SHA and tag
         id: vars
         run: |
           shortSha=$(git rev-parse --short ${{ github.sha }})
           echo "COMMIT_SHORT_SHA=$shortSha" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_TAG=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app-images-charts/resume-frontend:$shortSha" >> $GITHUB_ENV
+          echo "IMAGE_TAG=frontend-${shortSha}" >> $GITHUB_ENV
 
-      - name: Set up Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+      - name: Log in to OCIR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.OCI_REGION }}.ocir.io
+          username: ${{ secrets.OCI_TENANCY_NAMESPACE }}/${{ secrets.OCI_USERNAME }}
+          password: ${{ secrets.OCI_AUTH_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build the Docker image
+      - name: Build and push frontend image
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: false
-          tags: ${{ env.DOCKER_IMAGE_TAG }}
-
-      - name: Push the Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
+          platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.DOCKER_IMAGE_TAG }}
+          tags: |
+            ${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_TENANCY_NAMESPACE }}/resume/frontend:${{ env.COMMIT_SHORT_SHA }}
 
       - name: Checkout Infrastructure repo to update image tag
         uses: actions/checkout@v4
@@ -55,10 +47,10 @@ jobs:
       - name: Update image tag in frontend manifest
         run: |
           cd resume-infrastructure
-          sed -i -E 's|docker pull (.*):(.*?)|docker pull \1:${{ env.COMMIT_SHORT_SHA }}|' resume-app-manifests/resume-frontend.yaml
-          sed -i -E 's|(image:\s*.*resume-frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' resume-app-manifests/resume-frontend.yaml
+          # Update image to iad.ocir.io/id2uwn5pyixh/resume/frontend:SHORTSHA
+          sed -i -E 's|(image:\s*iad\.ocir\.io/id2uwn5pyixh/resume/frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' resume-app-manifests/resume-frontend.yaml || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add resume-app-manifests/resume-frontend.yaml
-          git commit -m "Update resume-frontend image to ${{ env.COMMIT_SHORT_SHA }}"
+          git add resume-app-manifests/resume-frontend.yaml || true
+          git commit -m "Update resume-frontend image to ${{ env.COMMIT_SHORT_SHA }}" || echo "no changes"
           git push origin main
