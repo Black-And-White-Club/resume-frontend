@@ -29,7 +29,7 @@ jobs:
         uses: oracle-actions/get-ocir-repository@v1.3.0
         id: get-ocir-repository
         with:
-          name: resume/frontend
+          name: resume
           compartment: ${{ secrets.OCI_COMPARTMENT_OCID }}
 
       - name: Log in to OCIR
