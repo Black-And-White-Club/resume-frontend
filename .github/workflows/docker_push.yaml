@@ -1,4 +1,4 @@
-name: Build and push to OCIR
+name: Build and push frontend to OCIR
 
 on:
   push:
@@ -7,6 +7,13 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_REGION }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,12 +25,17 @@ jobs:
           echo "COMMIT_SHORT_SHA=$shortSha" >> $GITHUB_ENV
           echo "IMAGE_TAG=frontend-${shortSha}" >> $GITHUB_ENV
 
-      - name: Log in to OCIR
-        uses: docker/login-action@v3
+      - name: Get or create OCIR frontend repo
+        uses: oracle-actions/get-ocir-repository@v1.3.0
+        id: get-ocir-repository
         with:
-          registry: ${{ secrets.OCI_REGION }}.ocir.io
-          username: ${{ secrets.OCI_TENANCY_NAMESPACE }}/${{ secrets.OCI_USERNAME }}
-          password: ${{ secrets.OCI_AUTH_TOKEN }}
+          name: resume/frontend
+          compartment: ${{ secrets.OCI_COMPARTMENT_OCID }}
+
+      - name: Log in to OCIR
+        uses: oracle-actions/login-ocir@v1.3.0
+        with:
+          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -35,22 +47,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_TENANCY_NAMESPACE }}/resume/frontend:${{ env.COMMIT_SHORT_SHA }}
-
-      - name: Checkout Infrastructure repo to update image tag
-        uses: actions/checkout@v4
-        with:
-          repository: Black-And-White-Club/resume-infrastructure
-          token: ${{ secrets.INFRASTRUCTURE_REPO_TOKEN }}
-          path: resume-infrastructure
-
-      - name: Update image tag in frontend manifest
-        run: |
-          cd resume-infrastructure
-          # Update image to iad.ocir.io/id2uwn5pyixh/resume/frontend:SHORTSHA
-          sed -i -E 's|(image:\s*iad\.ocir\.io/id2uwn5pyixh/resume/frontend:).*|\1${{ env.COMMIT_SHORT_SHA }}|' resume-app-manifests/resume-frontend.yaml || true
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add resume-app-manifests/resume-frontend.yaml || true
-          git commit -m "Update resume-frontend image to ${{ env.COMMIT_SHORT_SHA }}" || echo "no changes"
-          git push origin main
+            ${{ steps.get-ocir-repository.outputs.repo_path }}:${{ env.COMMIT_SHORT_SHA }}
