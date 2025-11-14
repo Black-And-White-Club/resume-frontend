@@ -23,19 +23,14 @@ jobs:
         run: |
           shortSha=$(git rev-parse --short ${{ github.sha }})
           echo "COMMIT_SHORT_SHA=$shortSha" >> $GITHUB_ENV
-          echo "IMAGE_TAG=frontend-${shortSha}" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$shortSha" >> $GITHUB_ENV
 
-      - name: Get or create OCIR frontend repo
-        uses: oracle-actions/get-ocir-repository@v1.3.0
-        id: get-ocir-repository
+      - name: Log in to OCIR (Docker login)
+        uses: docker/login-action@v3
         with:
-          name: resume
-          compartment: ${{ secrets.OCI_COMPARTMENT_OCID }}
-
-      - name: Log in to OCIR
-        uses: oracle-actions/login-ocir@v1.3.0
-        with:
-          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
+          registry: ${{ secrets.OCI_REGION }}.ocir.io
+          username: ${{ secrets.OCI_TENANCY_NAMESPACE }}/${{ secrets.OCI_USERNAME }}
+          password: ${{ secrets.OCI_AUTH_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -47,4 +42,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ steps.get-ocir-repository.outputs.repo_path }}:${{ env.COMMIT_SHORT_SHA }}
+            ${{ secrets.OCI_REGION }}.ocir.io/${{ secrets.OCI_TENANCY_NAMESPACE }}/resume:${{ env.COMMIT_SHORT_SHA }}
