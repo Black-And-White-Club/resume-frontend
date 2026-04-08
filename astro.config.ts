@@ -36,15 +36,13 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 export default defineConfig({
   output: 'static',
 
-  experimental: {
-    env: {
-      schema: {
-        PUBLIC_API_URL: envField.string({
-          context: 'client', // Expose it to the client
-          access: 'public', // Make it public
-          optional: true, // Ensure it's required
-        }),
-      },
+  env: {
+    schema: {
+      PUBLIC_API_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
     },
   },
 
