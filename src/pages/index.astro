@@ -1,282 +1,233 @@
 ---
-import Layout from "~/layouts/PageLayout.astro";
+import Layout from '~/layouts/PageLayout.astro';
 
 const metadata = {
-	title: "Jace Romero - DevOps Engineer | QA Automation",
-	ignoreTitleTemplate: true,
+  title: 'Jace Romero - DevOps Engineer | QA Automation',
+  ignoreTitleTemplate: true,
 };
 ---
 
 <Layout metadata={metadata}>
-	<div class="bg-gray-100 min-h-screen dark:bg-gray-900">
-		<div class="container mx-auto p-12">
-			<div class="bg-white rounded-lg shadow-md p-8 dark:bg-gray-800">
-				<!-- Portfolio Section -->
-				<section class="container mx-auto px-6 py-10 md:py-16">
-					<div class="max-w-4xl mx-auto text-center">
-						<h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-4">
-							Project Infrastructure Metrics Dashboard
-						</h2>
-						<p class="text-lg md:text-xl dark:text-slate-400 mb-8">
-							Explore the performance and health of my k8 cluster for my
-							projects.
-						</p>
-						<p>
-							<a
-								href="https://grafana.jaromero.cloud/public-dashboards/76062f12060547138a0f7e2f863b160b"
-								class="text-blue-500 hover:underline dark:text-blue-400"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								View the Dashboard
-							</a>
-						</p>
-					</div>
-				</section>
+  <div class="bg-gray-100 min-h-screen dark:bg-gray-900">
+    <div class="container mx-auto p-12">
+      <div class="bg-white rounded-lg shadow-md p-8 dark:bg-gray-800">
+        <!-- Portfolio Section -->
+        <section class="container mx-auto px-6 py-10 md:py-16">
+          <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold dark:text-white mb-4">
+              Project Infrastructure Metrics Dashboard
+            </h2>
+            <p class="text-lg md:text-xl dark:text-slate-400 mb-8">
+              Explore the performance and health of my k8 cluster for my projects.
+            </p>
+            <p>
+              <a
+                href="https://grafana.jaromero.cloud/public-dashboards/76062f12060547138a0f7e2f863b160b"
+                class="text-blue-500 hover:underline dark:text-blue-400"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View the Dashboard
+              </a>
+            </p>
+          </div>
+        </section>
 
-				<!-- Contact Information Section -->
-				<h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">
-					Jace Romero
-				</h1>
-				<div class="mb-6 text-gray-700 dark:text-gray-300">
-					<p>Brooklyn, NY 11215</p>
-					<p>
-						<a
-							href="mailto:romero.jace@gmail.com"
-							class="text-blue-500 hover:underline dark:text-blue-400"
-						>
-							romero.jace@gmail.com
-						</a>
-					</p>
-					<p>+1 956 346 4849</p>
-					<p>
-						GitHub: <a
-							href="https://github.com/Romero-jace"
-							class="text-blue-500 hover:underline dark:text-blue-400"
-							target="_blank"
-							rel="noopener noreferrer"
-						>github.com/Romero-jace</a> | Projects: <a
-							href="https://github.com/Black-And-White-Club/all-infrastructure"
-							class="text-blue-500 hover:underline dark:text-blue-400"
-							target="_blank"
-							rel="noopener noreferrer"
-						>all-infrastructure</a>
-					</p>
-				</div>
+        <!-- Contact Information Section -->
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Jace Romero</h1>
+        <div class="mb-6 text-gray-700 dark:text-gray-300">
+          <p>Brooklyn, NY 11215</p>
+          <p>
+            <a href="mailto:romero.jace@gmail.com" class="text-blue-500 hover:underline dark:text-blue-400">
+              romero.jace@gmail.com
+            </a>
+          </p>
+          <p>+1 956 346 4849</p>
+          <p>
+            GitHub: <a
+              href="https://github.com/Romero-jace"
+              class="text-blue-500 hover:underline dark:text-blue-400"
+              target="_blank"
+              rel="noopener noreferrer">github.com/Romero-jace</a
+            > | Projects: <a
+              href="https://github.com/Black-And-White-Club/all-infrastructure"
+              class="text-blue-500 hover:underline dark:text-blue-400"
+              target="_blank"
+              rel="noopener noreferrer">all-infrastructure</a
+            >
+          </p>
+        </div>
 
-				<!-- Visit Count Script -->
-				<script is:inline defer>
-					fetch("/api/count", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							Host: "resume-backend-svc",
-						},
-						body: JSON.stringify({ timestamp: new Date() }),
-					})
-						.then((response) => {
-							if (!response.ok) {
-								throw new Error(`HTTP error! Status: ${response.status}`);
-							}
-							return response.json();
-						})
-						.catch((error) => {
-							console.error("Error incrementing visit count:", error.message);
-						});
-				</script>
+        <!-- Visit Count Script -->
+        <script is:inline defer>
+          fetch('/api/count', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Host: 'resume-backend-svc',
+            },
+            body: JSON.stringify({ timestamp: new Date() }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .catch((error) => {
+              console.error('Error incrementing visit count:', error.message);
+            });
+        </script>
 
-				<!-- Profile Section -->
-				<div class="mb-8">
-					<h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-						Profile
-					</h2>
-					<p class="text-gray-700 dark:text-gray-300">
-						Engineer with senior QA automation experience and hands-on platform,
-						cloud, and infrastructure project work. Built independent project
-						experience across Kubernetes, ArgoCD, Terraform, Docker, Grafana,
-						OpenTelemetry, PostgreSQL, and NATS, with a focus on delivery
-						reliability, GitOps, observability, and automation.
-					</p>
-				</div>
+        <!-- Profile Section -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Profile</h2>
+          <p class="text-gray-700 dark:text-gray-300">
+            Engineer with senior QA automation experience and hands-on platform, cloud, and infrastructure project work.
+            Built independent project experience across Kubernetes, ArgoCD, Terraform, Docker, Grafana, OpenTelemetry,
+            PostgreSQL, and NATS, with a focus on delivery reliability, GitOps, observability, and automation.
+          </p>
+        </div>
 
-				<!-- Independent Project Section -->
-				<div class="mb-8">
-					<h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-						Independent Project
-					</h2>
-					<div>
-						<h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">
-							Independent Application Platform
-						</h3>
-						<p class="text-gray-700 dark:text-gray-300 mb-2">2025–Present</p>
-						<ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-							<li>
-								Built and maintained a multi-service application stack using Go,
-								Svelte, PostgreSQL, NATS, and containerized services deployed
-								through GitOps workflows.
-							</li>
-							<li>
-								Built and owned the infrastructure and delivery workflows across
-								Kubernetes manifests, ArgoCD applications, Kustomize overlays,
-								Helm values, image update automation, and deployment validation
-								scripts.
-							</li>
-							<li>
-								Added observability instrumentation and monitoring workflows using
-								OpenTelemetry, Grafana, Prometheus/Mimir, Loki, and Tempo.
-							</li>
-							<li>
-								Used strong QA automation and release engineering practices to
-								improve deployment confidence, workflow resilience, and
-								cross-service change safety.
-							</li>
-							<li>
-								Structured implementation work to stay modular and repeatable,
-								which made AI-assisted code generation, refactoring, and
-								follow-on delivery work more effective.
-							</li>
-						</ul>
-					</div>
-				</div>
+        <!-- Independent Project Section -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Independent Project</h2>
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">Independent Application Platform</h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-2">2025–Present</p>
+            <ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+              <li>
+                Built and maintained a multi-service application stack using Go, Svelte, PostgreSQL, NATS, and
+                containerized services deployed through GitOps workflows.
+              </li>
+              <li>
+                Built and owned the infrastructure and delivery workflows across Kubernetes manifests, ArgoCD
+                applications, Kustomize overlays, Helm values, image update automation, and deployment validation
+                scripts.
+              </li>
+              <li>
+                Added observability instrumentation and monitoring workflows using OpenTelemetry, Grafana,
+                Prometheus/Mimir, Loki, and Tempo.
+              </li>
+              <li>
+                Used strong QA automation and release engineering practices to improve deployment confidence, workflow
+                resilience, and cross-service change safety.
+              </li>
+              <li>
+                Structured implementation work to stay modular and repeatable, which made AI-assisted code generation,
+                refactoring, and follow-on delivery work more effective.
+              </li>
+            </ul>
+          </div>
+        </div>
 
-				<!-- Relevant Experience Section -->
-				<div class="mb-8">
-					<h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-						Relevant Experience
-					</h2>
-					<div class="flex flex-col gap-8">
-						<div>
-							<h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">
-								Sr. QA Automation Engineer
-							</h3>
-							<p class="text-gray-700 dark:text-gray-300 mb-2">
-								Bold Penguin, Inc | October 2023 – July 2024
-							</p>
-							<ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-								<li>
-									Optimized GitHub Actions workflows and CI execution patterns to
-									improve efficiency and release reliability.
-								</li>
-								<li>
-									Collaborated on Kubernetes-based environments and
-									infrastructure-adjacent developer workflows supporting dev/test
-									delivery.
-								</li>
-								<li>
-									Mentored engineers on automation, CI/CD, and maintainable
-									delivery practices.
-								</li>
-							</ul>
-						</div>
+        <!-- Relevant Experience Section -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Relevant Experience</h2>
+          <div class="flex flex-col gap-8">
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">Sr. QA Automation Engineer</h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-2">Bold Penguin, Inc | October 2023 – July 2024</p>
+              <ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+                <li>
+                  Optimized GitHub Actions workflows and CI execution patterns to improve efficiency and release
+                  reliability.
+                </li>
+                <li>
+                  Collaborated on Kubernetes-based environments and infrastructure-adjacent developer workflows
+                  supporting dev/test delivery.
+                </li>
+                <li>Mentored engineers on automation, CI/CD, and maintainable delivery practices.</li>
+              </ul>
+            </div>
 
-						<div>
-							<h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">
-								QA Engineer
-							</h3>
-							<p class="text-gray-700 dark:text-gray-300 mb-2">
-								WorkStep | February 2022 – September 2022
-							</p>
-							<ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-								<li>
-									Integrated automated quality gates into CircleCI workflows and
-									supported environment configuration for reliable test execution.
-								</li>
-								<li>
-									Expanded automated coverage to 100+ tests while helping teams
-									adopt scalable quality and release practices.
-								</li>
-							</ul>
-						</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">QA Engineer</h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-2">WorkStep | February 2022 – September 2022</p>
+              <ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+                <li>
+                  Integrated automated quality gates into CircleCI workflows and supported environment configuration for
+                  reliable test execution.
+                </li>
+                <li>
+                  Expanded automated coverage to 100+ tests while helping teams adopt scalable quality and release
+                  practices.
+                </li>
+              </ul>
+            </div>
 
-						<div>
-							<h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">
-								Software QA Engineer
-							</h3>
-							<p class="text-gray-700 dark:text-gray-300 mb-2">
-								CenterEdge | May 2021 – February 2022
-							</p>
-							<ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-								<li>
-									Improved deployment readiness by integrating automated coverage
-									into release workflows and pre-deployment checks.
-								</li>
-								<li>
-									Assisted in CI and container-based workflow optimizations to
-									improve build reuse and consistency.
-								</li>
-							</ul>
-						</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">Software QA Engineer</h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-2">CenterEdge | May 2021 – February 2022</p>
+              <ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+                <li>
+                  Improved deployment readiness by integrating automated coverage into release workflows and
+                  pre-deployment checks.
+                </li>
+                <li>
+                  Assisted in CI and container-based workflow optimizations to improve build reuse and consistency.
+                </li>
+              </ul>
+            </div>
 
-						<div>
-							<h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">
-								QA Automation Engineer
-							</h3>
-							<p class="text-gray-700 dark:text-gray-300 mb-2">
-								Edquity | June 2020 – February 2021
-							</p>
-							<ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-								<li>
-									Used GitLab CI, Terraform, and basic Kubernetes tooling to
-									support ephemeral test environments and automation workflows.
-								</li>
-							</ul>
-						</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">QA Automation Engineer</h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-2">Edquity | June 2020 – February 2021</p>
+              <ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+                <li>
+                  Used GitLab CI, Terraform, and basic Kubernetes tooling to support ephemeral test environments and
+                  automation workflows.
+                </li>
+              </ul>
+            </div>
 
-						<div>
-							<h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">
-								QA Automation Engineer
-							</h3>
-							<p class="text-gray-700 dark:text-gray-300 mb-2">
-								EverlyWell | June 2018 – September 2019
-							</p>
-							<ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-								<li>
-									Integrated automation into Jenkins, TravisCI, and AWS CodeBuild
-									to improve release consistency and build confidence.
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1">QA Automation Engineer</h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-2">EverlyWell | June 2018 – September 2019</p>
+              <ul class="list-disc list-outside pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+                <li>
+                  Integrated automation into Jenkins, TravisCI, and AWS CodeBuild to improve release consistency and
+                  build confidence.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-				<!-- Skills Section -->
-				<div class="mb-8">
-					<h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-						Skills
-					</h2>
-					<ul class="list-none text-gray-700 dark:text-gray-300 space-y-1">
-						<li>
-							<b class="text-gray-800 dark:text-white">Cloud & Platform:</b> GCP,
-							OCI, Kubernetes, Docker, ArgoCD, Kustomize, Helm, Terraform, GitOps
-						</li>
-						<li>
-							<b class="text-gray-800 dark:text-white">Observability:</b> Grafana,
-							OpenTelemetry, Prometheus/Mimir, Loki, Tempo
-						</li>
-						<li>
-							<b class="text-gray-800 dark:text-white">CI/CD & Automation:</b> GitHub
-							Actions, GitLab CI, Jenkins, CircleCI, TravisCI, Spinnaker, AWS CodeBuild
-						</li>
-						<li>
-							<b class="text-gray-800 dark:text-white">Programming:</b> Go, TypeScript,
-							Python, JavaScript, Bash
-						</li>
-						<li>
-							<b class="text-gray-800 dark:text-white">Systems:</b> PostgreSQL, NATS,
-							event-driven systems, deployment validation, release safety automation
-						</li>
-						<li>
-							<b class="text-gray-800 dark:text-white">Quality Engineering:</b> Test
-							automation, quality gates, E2E/API testing, developer workflow improvements
-						</li>
-						<li>
-							<b class="text-gray-800 dark:text-white">AI-Assisted Engineering:</b> Claude
-							Code, Codex, Gemini for code generation, refactoring, debugging, test
-							authoring, and documentation in modular, reusable workflows
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+        <!-- Skills Section -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Skills</h2>
+          <ul class="list-none text-gray-700 dark:text-gray-300 space-y-1">
+            <li>
+              <b class="text-gray-800 dark:text-white">Cloud & Platform:</b> GCP, OCI, Kubernetes, Docker, ArgoCD, Kustomize,
+              Helm, Terraform, GitOps
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">Observability:</b> Grafana, OpenTelemetry, Prometheus/Mimir, Loki,
+              Tempo
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">CI/CD & Automation:</b> GitHub Actions, GitLab CI, Jenkins, CircleCI,
+              TravisCI, Spinnaker, AWS CodeBuild
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">Programming:</b> Go, TypeScript, Python, JavaScript, Bash
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">Systems:</b> PostgreSQL, NATS, event-driven systems, deployment validation,
+              release safety automation
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">Quality Engineering:</b> Test automation, quality gates, E2E/API testing,
+              developer workflow improvements
+            </li>
+            <li>
+              <b class="text-gray-800 dark:text-white">AI-Assisted Engineering:</b> Claude Code, Codex, Gemini for code generation,
+              refactoring, debugging, test authoring, and documentation in modular, reusable workflows
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layout>
