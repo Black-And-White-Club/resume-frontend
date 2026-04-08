@@ -1,21 +1,8 @@
 export const headerData = {
   links: [
     {
-      text: 'Project GitHub Repos',
-      links: [
-        {
-          text: 'IaC',
-          href: 'https://github.com/Black-And-White-Club/resume-infrastructure',
-        },
-        {
-          text: 'Frontend',
-          href: 'https://github.com/Black-And-White-Club/resume-frontend',
-        },
-        {
-          text: 'Backend',
-          href: 'https://github.com/Black-And-White-Club/resume-backend',
-        },
-      ],
+      text: 'all-infrastructure',
+      href: 'https://github.com/Black-And-White-Club/all-infrastructure',
     },
   ],
 };
