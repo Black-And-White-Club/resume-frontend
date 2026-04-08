@@ -12,18 +12,13 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # Install dependencies and run tests
-      - name: Set up Node.js (for frontend) 
-        uses: actions/setup-node@v2  
-        with:
-          node-version: '20' 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Install Dependencies
-        run: |
-          npm install 
+        run: bun install
 
       - name: Run Tests
-        run: |
-          npm run test  
+        run: bun run test

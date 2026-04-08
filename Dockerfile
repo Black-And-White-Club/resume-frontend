@@ -1,18 +1,18 @@
 # Stage 1: Install dependencies and build the app
-FROM node:lts-alpine AS build
+FROM oven/bun:alpine AS build
 WORKDIR /app
 
-# Copy only package.json and package-lock.json for better caching
-COPY package*.json ./
+# Copy only package.json and bun.lock for better caching
+COPY package.json bun.lock ./
 
 # Install dependencies
-RUN npm ci --omit=dev
+RUN bun install --frozen-lockfile
 
 # Copy the rest of the application source code
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN bun run build
 
 # Stage 2: Create a minimal runtime image
 FROM nginx:alpine-slim AS runtime
