@@ -1,5 +1,5 @@
 # Stage 1: Install dependencies and build the app
-FROM oven/bun:alpine AS build
+FROM oven/bun:1.3-alpine AS build
 WORKDIR /app
 
 # Copy only package.json and bun.lock for better caching
@@ -15,7 +15,7 @@ COPY . .
 RUN bun run build
 
 # Stage 2: Create a minimal runtime image
-FROM nginx:alpine-slim AS runtime
+FROM nginx:1.29-alpine-slim AS runtime
 
 # Copy Nginx configuration
 COPY ./nginx.conf /etc/nginx/nginx.conf
